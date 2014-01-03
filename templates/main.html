@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+    <!-- font -->
+    <link href='http://fonts.googleapis.com/css?family=Exo+2' rel='stylesheet' type='text/css'>
+
+    <style type="text/css">
+        body {
+            padding: 1.0em;
+            font-family: "Exo 2", "Helvetica", sans-serif;
+        }
+        .row {
+            padding-bottom: 1.2em;
+        }
+
+        .toggle-on {
+            background-color: forestgreen;
+            color: rgba( 255, 255, 255, 0.8 );
+        }
+
+        .toggle-off {
+            background-color: white;
+            color: rgba( 0, 0, 0, 0.6 );
+        }
+
+        .value {
+            font-weight: bold;
+            line-height: 1em;
+            padding: 0.1em 0.2em 0.2em 0.2em;
+            border-radius: 0.1em;
+        }
+
+        .value.warning-high {
+            color: crimson;
+        }
+
+        .value.warning-low {
+            color: dodgerblue;
+        }
+
+        .col-md-6 .value {
+            font-weight: bold;
+            font-size: 10.2em;
+        }
+
+        .col-md-6 .key {
+            font-weight: bold;
+            font-size: 2.2em;
+        }
+
+        .col-md-4 .value {
+            font-weight: bold;
+            font-size: 5.2em;
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- sensor rows -->
+<div class="row">
+    <div class="col-md-6" data-name="PH" data-min="5.5" data-max="6.2">
+        <div class="frame">
+            <div class="key">pH</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+    <div class="col-md-6" data-name="EC" data-unit="ppm">
+        <div class="frame">
+            <div class="key">EC</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4" data-name="TEMP_WET" data-unit="&#176C" data-min="15.0" data-max="25.0">
+        <div class="frame">
+            <div class="key">VANNTEMPERATUR</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+    <div class="col-md-4" data-name="TEMP_DRY" data-unit="&#176C" data-min="10.0" data-max="30.0">
+        <div class="frame">
+            <div class="key">LUFTTEMPERATUR</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+    <div class="col-md-4" data-name="HUMIDITY_DRY" data-unit="%" data-min="0" data-max="50">
+        <div class="frame">
+            <div class="key">LUFTFUKTIGHET</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+</div>
+
+<!-- actuator row -->
+<div class="row">
+    <div class="col-md-4" data-name="FAN_DRY" data-type="toggle">
+        <div class="frame">
+            <div class="key">VENTILASJON</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+    <div class="col-md-4" data-name="FAN_WET" data-type="toggle">
+        <div class="frame">
+            <div class="key">DAMPSPREDNING</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+    <div class="col-md-4" data-name="FOGGER" data-type="toggle">
+        <div class="frame">
+            <div class="key">FORSTØVER</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+</div>
+
+<!--
+<div class="row">
+    <div class="col-md-4" data-name="SOLENOID_PH_UP" data-type="toggle">
+        <div class="frame">
+            <div class="key">pH+</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+    <div class="col-md-4" data-name="SOLENOID_PH_DOWN" data-type="toggle">
+        <div class="frame">
+            <div class="key">pH-</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+    <div class="col-md-4" data-name="SOLENOID_NUTRIENT" data-type="toggle">
+        <div class="frame">
+            <div class="key">NÆRING</div>
+            <div class="value">0.0</div>
+        </div>
+    </div>
+</div>
+-->
+
+<script>
+    function update() {
+
+        $(".value").animate({"opacity": 0});
+
+        $.getJSON( "/data" ).done( function( data ) {
+            $.each( data, function(k,v) {
+                var roundedValue = Math.round((v) * 10.0) / 10.0;
+                $("div[data-name=" + k + "]").each( function() {
+                    parent = $(this);
+                    value = parent.find( ".value" ).first();
+
+                    if ( parent.data("type") == "toggle" ) {
+                        if ( roundedValue > 0 ) {
+                            value.text( "PÅ" );
+                            value.removeClass( "toggle-off" );
+                            value.addClass( "toggle-on" );
+                        } else {
+                            value.text( "AV" );
+                            value.removeClass( "toggle-on" );
+                            value.addClass( "toggle-off" );
+                        }
+                    } else {
+                        var output = roundedValue;
+                        if ( parent.data("unit") ) {
+                            output += parent.data("unit");
+                        }
+                        value.text( output );
+
+                        // handles range
+
+                        if ( roundedValue <= parent.data("min") ) {
+                            value.addClass( "warning-low" );
+                        } else if ( roundedValue > parent.data("max") ) {
+                            value.addClass( "warning-high" );
+                        } else {
+                            value.removeClass( "warning-low" );
+                            value.removeClass( "warning-high" );
+                        }
+                    }
+                });
+            });
+        }).done( function() {
+            $(".value").animate({"opacity": 1});
+        });
+
+        setTimeout( update, 5000 );
+    }
+
+    $( function() {
+        update();
+    });
+</script>
+
+</body>
+</html>
