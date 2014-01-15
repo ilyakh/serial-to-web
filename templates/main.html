@@ -3,23 +3,33 @@
 <head>
     <title></title>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/static/jquery.min.js"></script>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/static/bootstrap-theme.min.css">
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-
-    <!-- font -->
-    <link href='http://fonts.googleapis.com/css?family=Exo+2' rel='stylesheet' type='text/css'>
+    <script src="/static/bootstrap.min.js"></script>
 
     <style type="text/css">
+
+        @font-face {
+            font-family: "Exo 2"
+            src: url( "/static/fonts/Exo2.0-Regular.otf" ) format( "opentype" );
+        }
+
+        @font-face {
+            font-family: "Exo 2";
+            font-weight: bold;
+            src: url( "/static/fonts/Exo2.0-Regular.otf" ) format( "opentype" );
+        }
+
         body {
             padding: 1.0em;
             font-family: "Exo 2", "Helvetica", sans-serif;
+            overflow: hidden;
         }
         .row {
             padding-bottom: 1.2em;
@@ -77,7 +87,7 @@
             <div class="value">0.0</div>
         </div>
     </div>
-    <div class="col-md-6" data-name="EC" data-unit="ppm">
+    <div class="col-md-6" data-name="EC">
         <div class="frame">
             <div class="key">EC</div>
             <div class="value">0.0</div>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 import json
 from settings import *
 
@@ -23,7 +23,16 @@ def index():
     return render_template( 'main.html' )
 
 if __name__ == "__main__":
+
     app.run( debug=True )
+
+    url_for( 'static', filename='jquery.min.js' )
+    url_for( 'static', filename='bootstrap.min.css' )
+    url_for( 'static', filename='bootstrap-theme.min.css' )
+    url_for( 'static', filename='bootstrap.min.js' )
+    url_for( 'static', filename='fonts/Exo2.0-Regular.otf' )
+
+
 
 
 
