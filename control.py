@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
     receiver = Receiver()
 
-    # database.execute( """ DROP TABLE IF EXISTS krydderino """ )
+    database.execute( """ DROP TABLE IF EXISTS krydderino """ )
 
     database.execute(
         """ CREATE TABLE IF NOT EXISTS krydderino (

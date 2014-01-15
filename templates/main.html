@@ -41,7 +41,6 @@
         }
 
         .toggle-off {
-            background-color: white;
             color: rgba( 0, 0, 0, 0.6 );
         }
 
@@ -60,19 +59,24 @@
             color: dodgerblue;
         }
 
-        .col-md-6 .value {
+        .col-md-4 .value {
+            font-weight: bold;
+            font-size: 5.2em;
+        }
+
+        .large .value {
             font-weight: bold;
             font-size: 10.2em;
         }
 
-        .col-md-6 .key {
+        .large .key {
             font-weight: bold;
             font-size: 2.2em;
         }
 
-        .col-md-4 .value {
-            font-weight: bold;
-            font-size: 5.2em;
+        .frame {
+            padding-left: 2em;
+            padding-right: 2em;
         }
     </style>
 
@@ -81,13 +85,18 @@
 
 <!-- sensor rows -->
 <div class="row">
-    <div class="col-md-6" data-name="PH" data-min="5.5" data-max="6.2">
+    <div class="col-md-4 large" data-name="PH" data-min="5.5" data-max="6.2">
+        <div class="frame">
+            <img src="/static/bg.jpg" style="width: 100%; border-radius: 0.5em;" />
+        </div>
+    </div>
+    <div class="col-md-4 large" data-name="PH" data-min="5.5" data-max="6.2">
         <div class="frame">
             <div class="key">pH</div>
             <div class="value">0.0</div>
         </div>
     </div>
-    <div class="col-md-6" data-name="EC">
+    <div class="col-md-4 large" data-name="EC">
         <div class="frame">
             <div class="key">EC</div>
             <div class="value">0.0</div>

@@ -31,6 +31,7 @@ if __name__ == "__main__":
     url_for( 'static', filename='bootstrap-theme.min.css' )
     url_for( 'static', filename='bootstrap.min.js' )
     url_for( 'static', filename='fonts/Exo2.0-Regular.otf' )
+    url_for( 'static', filename='bg.jpg' )
 
 
 
