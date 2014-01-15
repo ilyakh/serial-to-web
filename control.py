@@ -24,6 +24,9 @@ class Receiver( object ):
         def __init__( self, data ):
             self.data = data
 
+        def __getitem__( self, key ):
+            return self.data[key]
+
         def is_valid( self, required_fields=FIELDS ):
             result = True
             for field in required_fields:
@@ -36,9 +39,71 @@ class Receiver( object ):
 
             database.execute(
                 """ INSERT INTO krydderino VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? ) """,
-                ( values )
+                values
             )
             database.commit()
+
+
+class Strategy( object ):
+    def __init__( self ):
+        self.rules = []
+
+    def add_rules( self, *rules ):
+        for each_rule in rules:
+            self.rules.append( each_rule )
+
+    def __call__( self, entry ):
+        for rule in self.rules:
+            if not rule.evaluate( entry ):
+                rule.react()
+
+
+class Rule( object ):
+    def __init__( self, state_index ):
+        self.state_index = state_index
+
+
+class DryAreaTemp( Rule ):
+    def __call__( self, state ):
+        if state[self.state_index] > 32:
+            # start the fan
+            pass
+        elif state[self.state_index] < 20:
+            # spray acid, release toxins
+            pass
+        else:
+            # everything is ok, continue
+            pass
+
+class WetAreaTemp( Rule ):
+    def __call__( self, state ):
+        if state[self.state_index] < 20:
+            pass
+
+class DryAreaHumidity( Rule ):
+    def __call__( self, state ):
+        if state[self.state_index] > 60:
+            # start the fan
+            pass
+
+class FogAcidity( Rule ):
+    def __call__( self, state ):
+        if state[self.state_index] > 6.2:
+            pass
+        elif state[self.state_index] < 5.5:
+            pass
+
+class WaterLevel( Rule ):
+    def __call__( self, state ):
+        if state[self.state_index] < 5.0:
+            pass
+
+
+
+# [+] faa farduino til aa lagre dato for siste gang vifta ble skrudd av
+
+
+
 
 
 if __name__ == "__main__":
@@ -62,25 +127,32 @@ if __name__ == "__main__":
         """
     )
 
-    # [+] search and handshake
+    # [+] port search and handshake
     serial = Serial( SERIAL_PORT, SERIAL_BAUDRATE, timeout=3 )
     serial.close()
     serial.open()
 
-    try:
-        while True:
+
+    # initialization of strategy
+    strategy = Strategy()
+    #strategy.add_rules(
+    #    WetAreaTemp(  ),
+    #    DryAreaTemp(),
+    #    DryAreaHumidity(),
+    #    FogAcidity(),
+    #)
+
+    while True:
+        try:
             data = serial.readline()
             entry = receiver.parse( data )
             if entry.is_valid():
                 entry.to_database()
-    except KeyboardInterrupt:
-        print database.execute( """ SELECT * FROM krydderino """ ).fetchall()
+                # Controller( entry )
 
-        database.close()
-        serial.close()
-
-    """
-    except SerialException:
-        pass
-        # reconnect
-    """
+        except KeyboardInterrupt:
+            database.close()
+            serial.close()
+        except SerialException:
+            time.sleep( RECONNECT_DELAY )
+            serial.open()

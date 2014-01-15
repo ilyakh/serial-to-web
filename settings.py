@@ -11,6 +11,8 @@ FIELDS = (
     "FOGGER"
 )
 
+RECONNECT_DELAY = 5
+
 DATABASE = 'db/krydderino.db'
 
 SERIAL_BAUDRATE = 9600
